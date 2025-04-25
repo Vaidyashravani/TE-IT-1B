@@ -1,0 +1,47 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Registration</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <h2>User Registration</h2>
+  <form id="registrationForm">
+    <input type="text" id="name" placeholder="Name" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // Stop form from refreshing the page
+
+      const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      };
+
+      // Save to local storage
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      users.push(user);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      // AJAX POST (mock server)
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:3000/register", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          alert("User Registered Successfully!");
+          window.location.href = "data.html"; // Redirect to data page
+        }
+      };
+      xhr.send(JSON.stringify(user));
+    });
+  </script>
+</body>
+</html>
